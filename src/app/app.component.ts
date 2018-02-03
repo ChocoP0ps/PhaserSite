@@ -20,6 +20,8 @@ export class AppComponent {
     down = false;
     right = false;
     left = false;
+    bending = false;
+    jump = true;
 
     constructor() {
         this.game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, 'content', {
@@ -31,12 +33,13 @@ export class AppComponent {
     preload() {
         this.game.load.tilemap('map', 'assets/map/super_mario.json', null, Phaser.Tilemap.TILED_JSON);
         this.game.load.image('tiles', 'assets/map/super_mario.png', 64, 64);
-        this.game.load.spritesheet('perso', 'assets/map/sprite.png', 64, 64);
+        this.game.load.spritesheet('perso', 'assets/map/perso_grand.png', 698, 640);
         this.scale = (1 / 949) * window.innerHeight;
         this.speed = 300;
     }
     create() {
         this.game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
+        this.game.physics.startSystem(Phaser.Physics.ARCADE);
         this.map = this.game.add.tilemap('map');
         this.map.addTilesetImage('SuperMarioBros-World1-1', 'tiles');
         this.layer = this.map.createLayer('World1', window.screen.width, window.screen.height);
@@ -45,20 +48,20 @@ export class AppComponent {
         this.layer.wrap = true;
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.map.setCollision([14, 16, 21, 22, 27, 28, 40]);
+        this.game.physics.arcade.gravity.y = 400;
 
         this.perso = this.game.add.sprite(64 * 16 * this.scale, 64 * 12 * this.scale, 'perso');
-        this.perso.scale.set(this.scale * 2);
+        this.perso.scale.set(0.2);
         this.game.physics.enable(this.perso);
-        this.perso.body.bounce.y = 0.2;
-        this.perso.body.gravity.y = 7000;
         this.perso.body.collideWorldBounds = true;
         this.perso.anchor.x = 0.5;
         this.perso.anchor.y = 0.5;
-        this.perso.animations.add('walk_left', [118, 119, 120, 121, 122, 123, 124, 125], 10, true, true);
-        this.perso.animations.add('walk_right', [144, 145, 146, 147, 148, 149, 150, 151], 10, true, true);
-        this.perso.animations.add('walk_up', [260, 261, 262, 263, 264, 265], 10, true, true);
-        this.perso.frame = 26;
+        this.perso.animations.add('idle', [4, 15, 26], 6, true, true);
+        this.perso.animations.add('walk_horizontally', [8, 19, 30, 41, 52, 63, 74, 85], 30, true, true);
+        this.perso.animations.add('jump', [6, 17, 28], 10, true, true);
+        this.perso.animations.add('bend', [2, 13, 24, 3], 10, true, true);
         this.game.physics.enable(this.perso);
+        this.perso.body.setSize(322, 555, 160, 85);
     }
 
     update() {
@@ -90,34 +93,46 @@ export class AppComponent {
         }
 
         this.perso.body.velocity.x = 0;
-        this.perso.body.velocity.y = 0;
+        this.bending = false;
+        // this.perso.body.velocity.y = 0;
 
-        if (this.left) {
+        this.jump = !this.perso.body.onFloor();
+        
+        if (this.up && this.perso.body.onFloor()) {
+            this.jump = true;
+            this.perso.body.velocity.y = -350;
+            if (this.perso.animations.name !== 'jump') {
+                this.perso.animations.play('jump', 30, false);
+            }
+        } else if (this.down) {
+            this.bending = true;
+            this.perso.body.velocity.y = this.speed;
+            if (this.perso.animations.name !== 'bend') {
+                this.perso.animations.play('bend', 30, false);
+            }
+        } 
+
+        if (this.left && !this.bending) {
             this.perso.body.velocity.x = this.speed * (-1);
-            if (this.perso.animations.name !== 'walk_left' || this.perso.animations.paused) {
-                this.perso.animations.play('walk_left', 10, true);
-                this.perso.animations.paused = false;
+            if (this.perso.scale.x > 0) {
+                this.perso.scale.x *= -1;
             }
-        } else if (this.right) {
+            if (!this.jump && this.perso.animations.name !== 'walk_horizontally') {
+                this.perso.animations.play('walk_horizontally', 30, true);
+            }
+        } else if (this.right && !this.bending) {
             this.perso.body.velocity.x = this.speed;
-            if (this.perso.animations.name !== 'walk_right' || this.perso.animations.paused) {
-                this.perso.animations.play('walk_right', 10, true);
-                this.perso.animations.paused = false;
-            }
-        } else if (this.up) {
-            this.perso.body.velocity.y = this.speed * (-1);
-            if (this.perso.animations.name !== 'walk_up' || this.perso.animations.paused) {
-                this.perso.animations.play('walk_up', 10, true);
-                this.perso.animations.paused = false;
-            }
             if (this.perso.scale.x < 0) {
                 this.perso.scale.x *= -1;
             }
-        } else if (this.down) {
-
-        } else {
-            this.perso.animations.paused = true;
-            this.perso.frame = 26;
+            if (!this.jump && this.perso.animations.name !== 'walk_horizontally') {
+                this.perso.animations.play('walk_horizontally', 30, true);
+            }
+        }
+        if (!this.left && !this.right && !this.jump && !this.bending) {
+            if (this.perso.animations.name !== 'idle') {
+                this.perso.animations.play('idle', 6, true);
+            }
         }
     }
 }
