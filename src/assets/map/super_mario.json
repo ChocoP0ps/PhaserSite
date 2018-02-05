@@ -49,13 +49,13 @@
          "margin":0,
          "name":"SuperMarioBros-World1-1",
          "spacing":0,
-         "tilecount":220,
+         "tilecount":55,
          "tileheight":64,
          "tilewidth":64
         }, 
         {
-         "firstgid":221,
-         "source":"C:\/Users\/alexa\/OneDrive\/Documents\/super_mario.tsx"
+         "firstgid":56,
+         "source":"super_mario.png"
         }],
  "tilewidth":64,
  "type":"map",
