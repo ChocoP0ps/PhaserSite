@@ -11,13 +11,15 @@ import { MarioLevel } from './marioLevel';
 })
 export class AppComponent {
     game: Phaser.Game;
-    marioLevel: MarioLevel;
+    marioLevel: any;
     zeldaLevel: any;
 
     constructor() {
         this.game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, 'content');
         
-        this.marioLevel = new MarioLevel(this.game);
+        const mario = new MarioLevel(this.game);
+      
+        this.marioLevel = mario.getLevel();
 
         this.game.state.add('mario', this.marioLevel);
         this.game.state.add('zelda', this.marioLevel);
