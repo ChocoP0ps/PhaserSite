@@ -52,10 +52,6 @@
          "tilecount":55,
          "tileheight":64,
          "tilewidth":64
-        }, 
-        {
-         "firstgid":56,
-         "source":"super_mario.png"
         }],
  "tilewidth":64,
  "type":"map",
