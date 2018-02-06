@@ -110,7 +110,7 @@ export class MarioLevel {
         if (this.nextLetter < this.game.time.now && this.counterLetter < this.descr.length) {
             this.descrText.text += this.descr[this.counterLetter];
             this.counterLetter++;
-            this.nextLetter = this.game.time.now + 50;
+            this.nextLetter = this.game.time.now + 35;
         }
 
         if (this.perso.position.x > 11.5 * 64 && this.perso.position.x < 13.5 * 64) {
