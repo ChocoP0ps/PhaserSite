@@ -52,7 +52,7 @@ export class MarioLevel {
     preload() {
         this.game.load.tilemap('map', 'assets/map/super_mario.json', null, Phaser.Tilemap.TILED_JSON);
         this.game.load.image('tiles', 'assets/map/super_mario.png', 64, 64);
-        this.game.load.spritesheet('perso', 'assets/map/perso_grand.png', 698, 640);
+        this.game.load.spritesheet('perso', 'assets/map/perso_grand.png', 349, 320);
         this.scale = (1 / 949) * window.innerHeight;
         this.speed = 300;
         this.game.load.bitmapFont('emulogic_white', 'assets/Fonts/emulogic_white.png', 'assets/Fonts/emulogic.fnt', 0, 0, 10);
@@ -86,7 +86,7 @@ export class MarioLevel {
         this.contactText = this.game.add.bitmapText(20.87 * 64, 8.6 * 64, 'emulogic_black', '', 11);
 
         this.perso = this.game.add.sprite(64 * 16 * this.scale, 64 * 12 * this.scale, 'perso');
-        this.perso.scale.set(0.2);
+        this.perso.scale.set(0.4);
         this.game.physics.enable(this.perso);
         this.perso.body.collideWorldBounds = true;
         this.perso.anchor.x = 0.5;
@@ -96,7 +96,7 @@ export class MarioLevel {
         this.perso.animations.add('jump', [6, 17, 28], 10, true, true);
         this.perso.animations.add('bend', [2, 13, 24, 3], 10, true, true);
         this.game.physics.enable(this.perso);
-        this.perso.body.setSize(322, 555, 160, 85);
+        this.perso.body.setSize(161, 278, 80, 43);
 
         this.formationTile = this.layer.getTiles(12 * 64, 9 * 64, 64, 64)[0];
         this.experienceTile = this.layer.getTiles(15 * 64, 9 * 64, 1, 1)[0];
