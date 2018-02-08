@@ -19,29 +19,17 @@ export class MetroidLevel {
     left = false;
     bending = false;
     jump = true;
-    descr: string;
-    nextLetter: number;
-    counterLetter: number;
-    descrText: any;
-    formationTile: any;
-    experienceTile: any;
-    projetsTile: any;
-    contactTile: any;
-    formationText: any;
-    nextLetterFormation: number;
-    experienceText: any;
-    nextLetterExperience: number;
-    projetsText: any;
-    nextLetterProjet: number;
-    contactText: any;
-    nextLetterContact: number;
+
+    doors_down: any;
+    doors_up: any;
 
     constructor(game) {
         this.game = game;
         this.level = {
             preload: this.preload,
             create: this.create,
-            update: this.update
+            update: this.update,
+            render: this.render
         };
     }
 
@@ -54,41 +42,39 @@ export class MetroidLevel {
         this.game.load.tilemap('map', 'assets/map/metroid.json', null, Phaser.Tilemap.TILED_JSON);
         this.game.load.image('extras', 'assets/map/extras.png', 64, 64);
         this.game.load.image('main', 'assets/map/main_blue.png', 64, 64);
+        this.game.load.image('doors_left', 'assets/map/regular_left.png');
+        this.game.load.image('doors_right', 'assets/map/regular_right.png');
         this.game.load.spritesheet('perso', 'assets/map/perso_grand.png', 349, 320);
         this.scale = window.innerHeight / 949;
-        this.speed = 300;
-        this.game.load.bitmapFont('emulogic_white', 'assets/Fonts/emulogic_white.png', 'assets/Fonts/emulogic.fnt', 0, 0, 10);
-        this.game.load.bitmapFont('emulogic_black', 'assets/Fonts/emulogic_black.png', 'assets/Fonts/emulogic.fnt', 0, 0, 10);
-        this.nextLetter = 0;
-        this.nextLetterFormation = 0;
-        this.nextLetterExperience = 0;
-        this.nextLetterProjet = 0;
-        this.nextLetterContact = 0;
-        this.counterLetter = 0;
+        this.speed = 800;
     }
     create() {
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
         this.map = this.game.add.tilemap('map');
         this.map.addTilesetImage('main', 'main');
         this.map.addTilesetImage('extras', 'extras');
-        // this.game.scale.set(0.8);
         this.backLayer = this.map.createLayer('Tile Layer 1', 50 * 64, 84 * 64);
         this.backLayer.scale.set(this.scale);
         this.backLayer.resizeWorld();
-        this.backLayer.wrap = true;
+        // this.backLayer.wrap = true;
         this.decoLayer = this.map.createLayer('Decorations', 50 * 64, 84 * 64);
         this.decoLayer.scale.set(this.scale);
         this.decoLayer.resizeWorld();
-        this.decoLayer.wrap = true;
+        // this.decoLayer.wrap = true;
         this.game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
         this.cursors = this.game.input.keyboard.createCursorKeys();
-        this.map.setCollisionBetween(0, 1000, true, this.backLayer);
+        this.map.setCollisionByExclusion([12, 13 , 14, 15, 21, 22, 49, 50, 51, 52, 65, 66, 83, 84, 85, 86], true, this.backLayer);
+        this.backLayer.debug = true;
         this.game.physics.arcade.gravity.y = 400;
+
+        this.doors_down = this.game.add.sprite(0 , 64 * 73 * this.scale, 'doors_left');
 
         this.perso = this.game.add.sprite(64 * 5 * this.scale, 64 * 78 * this.scale, 'perso');
         this.perso.scale.set(0.8);
         this.game.physics.enable(this.perso);
-        this.perso.body.collideWorldBounds = true;
+        this.perso.body.collideWorldBounds = false;
+        this.perso.body.bounce = 0;
+        this.perso.body.gravity = 400;
         this.perso.anchor.x = 0.5;
         this.perso.anchor.y = 0.5;
         this.perso.animations.add('idle', [4, 15, 26], 6, true, true);
@@ -98,6 +84,11 @@ export class MetroidLevel {
         this.game.physics.enable(this.perso);
         this.perso.body.setSize(161, 278, 80, 43);
         this.game.camera.follow(this.perso);
+    }
+
+    render() {
+            this.game.debug.body(this.perso);
+            this.game.debug.body(this.backLayer);
     }
 
     update() {
@@ -137,7 +128,7 @@ export class MetroidLevel {
 
         if (this.up && this.perso.body.onFloor()) {
             this.jump = true;
-            this.perso.body.velocity.y = -350;
+            this.perso.body.velocity.y = -1000;
             if (this.perso.animations.name !== 'jump') {
                 this.perso.animations.play('jump', 6, true);
             }

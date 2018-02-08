@@ -47,7 +47,6 @@ export class MarioLevel {
     getLevel() {
         return this.level;
     }
-
     
     preload() {
         this.game.load.tilemap('map', 'assets/map/super_mario.json', null, Phaser.Tilemap.TILED_JSON);
@@ -88,7 +87,8 @@ export class MarioLevel {
         this.perso = this.game.add.sprite(64 * 16 * this.scale, 64 * 12 * this.scale, 'perso');
         this.perso.scale.set(0.4);
         this.game.physics.enable(this.perso);
-        this.perso.body.collideWorldBounds = true;
+        this.perso.body.collideWorldBounds = false;
+        this.perso.body.bounce.set(0);
         this.perso.anchor.x = 0.5;
         this.perso.anchor.y = 0.5;
         this.perso.animations.add('idle', [4, 15, 26], 6, true, true);
@@ -119,7 +119,7 @@ export class MarioLevel {
                 this.nextLetterFormation = this.game.time.now + 50;
             }
             if (this.perso.position.x > 12 * 64 && this.perso.position.x < 13 * 64 && this.perso.position.y < 690 && this.perso.position.y > 685) {
-                this.game.state.start('zelda');
+                this.game.state.start('metroid');
             }
         } else {
             this.formationText.text = this.formationText.text.substring(0, this.formationText.text.length - 1);
