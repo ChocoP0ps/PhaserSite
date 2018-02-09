@@ -112,7 +112,7 @@ export class MetroidLevel {
         this.enemies.create(13 * 64, 45 * 64, 'bat');
         this.enemies.create(42 * 64, 23 * 64, 'bat');
         this.game.physics.enable(this.enemies);
-        this.enemies.setAll('body.allowGravity', false);
+        // this.enemies.setAll('body.allowGravity', false);
         this.enemies.setAll('anchor.x', 0.5);
         var style = { font: "30px Arial", fill: "#ffffff" };
 
@@ -123,6 +123,7 @@ export class MetroidLevel {
                 this.enemies.children[i].addChild(this.game.add.text(25, 0, this.skillsLang[indexManta], style));
                 indexManta++;
             } else if (this.enemies.children[i].key === 'bat') {
+                this.enemies.children[i].body.allowGravity = false;
                 this.enemies.children[i].addChild(this.game.add.text(20, 20, this.skillsComm[indexBat], style));
                 indexBat++;
             }
