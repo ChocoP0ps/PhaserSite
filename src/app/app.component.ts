@@ -26,6 +26,6 @@ export class AppComponent {
         this.game.state.add('mario', this.marioLevel);
         this.game.state.add('metroid', this.metroidLevel);
 
-        this.game.state.start('metroid');
+        this.game.state.start('mario');
     }
 }

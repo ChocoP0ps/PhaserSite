@@ -29,6 +29,7 @@ export class MetroidLevel {
     moveEnemiesTime: number;
     skillsLang: string[];
     skillsComm: string[];
+    nbKilled: number;
 
     constructor(game) {
         this.game = game;
@@ -48,8 +49,7 @@ export class MetroidLevel {
         this.game.load.tilemap('map', 'assets/map/metroid.json', null, Phaser.Tilemap.TILED_JSON);
         this.game.load.image('extras', 'assets/map/extras.png', 64, 64);
         this.game.load.image('main', 'assets/map/main_blue.png', 64, 64);
-        this.game.load.image('doors_left', 'assets/map/regular_left.png');
-        this.game.load.image('doors_right', 'assets/map/regular_right.png');
+        this.game.load.image('door', 'assets/map/door.png');
         this.game.load.image('bullet', 'assets/map/bullet.png');
         this.game.load.image('mantanoid', 'assets/map/mantanoid.png');
         this.game.load.image('bat', 'assets/map/bat.png');
@@ -58,6 +58,7 @@ export class MetroidLevel {
         this.speed = 800;
         this.bulletTime = 0;
         this.moveEnemiesTime = 0;
+        this.nbKilled = 0;
         this.skillsLang = ['Java', 'C#', 'C++', 'JavaScript', 'PHP', 'SQL', 'Python', 'C'];
         this.skillsComm = ['Teamwork', 'Passionate', 'Leader'];
     }
@@ -79,11 +80,11 @@ export class MetroidLevel {
         this.map.setCollisionByExclusion([12, 13, 14, 15, 21, 22, 49, 50, 51, 52, 65, 66, 83, 84, 85, 86], true, this.backLayer);
         this.game.physics.arcade.gravity.y = 1000;
 
-        this.doors_down = this.game.add.sprite(0, 64 * 73 * this.scale, 'doors_left');
+        this.doors_down = this.game.add.sprite(0, 64 * 73 * this.scale, 'door');
         this.game.physics.enable(this.doors_down);
         this.doors_down.body.immovable = true;
         this.doors_down.body.allowGravity = false;
-        this.doors_up = this.game.add.sprite(64 * 49 * this.scale, 64 * 4 * this.scale, 'doors_right');
+        this.doors_up = this.game.add.sprite(64 * 49 * this.scale, 64 * 4 * this.scale, 'door');
         this.game.physics.enable(this.doors_up);
         this.doors_up.body.immovable = true;
         this.doors_up.body.allowGravity = false;
@@ -92,8 +93,8 @@ export class MetroidLevel {
         this.bullets.enableBody = true;
         this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
         this.bullets.createMultiple(100, 'bullet');
-        this.bullets.callAll('events.onOutOfBounds.add', 'events.onOutOfBounds', () => {
-            this.bullet.kill();
+        this.bullets.callAll('events.onOutOfBounds.add', 'events.onOutOfBounds', (bullet) => {
+            bullet.kill();
         }, this);
         this.bullets.setAll('checkWorldBounds', true);
         this.bullets.enableBody = true;
@@ -112,7 +113,6 @@ export class MetroidLevel {
         this.enemies.create(13 * 64, 45 * 64, 'bat');
         this.enemies.create(42 * 64, 23 * 64, 'bat');
         this.game.physics.enable(this.enemies);
-        // this.enemies.setAll('body.allowGravity', false);
         this.enemies.setAll('anchor.x', 0.5);
         var style = { font: "30px Arial", fill: "#ffffff" };
 
@@ -159,8 +159,17 @@ export class MetroidLevel {
             this.game.state.start('metroid');
         });
         this.game.physics.arcade.collide(this.bullets, this.enemies, (bullet, enemy) => {
+            const t = this.game.add.text(200, 500, enemy.children[0].text, { font: 50 + "px Arial", fill: "#ffffff", align: "center" });
+            t.fixedToCamera = true;
+            t.cameraOffset.setTo(20, (60 * this.nbKilled) + 20);
+            if (this.skillsComm.indexOf(t.text) > -1) {
+                t.addColor("#afafff", 0);
+            } else {
+                t.addColor("#afffcf", 0);
+            }
             bullet.kill();
             enemy.kill();
+            this.nbKilled++;
         });
 
         if (this.moveEnemiesTime < this.game.time.now) {
@@ -210,6 +219,10 @@ export class MetroidLevel {
         // this.perso.body.velocity.y = 0;
 
         this.jump = !this.perso.body.onFloor();
+
+        if (this.perso.body.velocity.y > 1000) {
+            this.perso.body.velocity.y = 1000;
+        }
 
 
         if (this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR).isDown) {
