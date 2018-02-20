@@ -68,11 +68,11 @@ export class MetroidLevel {
         this.map.addTilesetImage('main', 'main');
         this.map.addTilesetImage('extras', 'extras');
         this.backLayer = this.map.createLayer('Tile Layer 1', 50 * 64, 84 * 64);
-        this.backLayer.scale.set(this.scale);
+        this.backLayer.setScale(this.scale, this.scale);
         this.backLayer.resizeWorld();
         // this.backLayer.wrap = true;
         this.decoLayer = this.map.createLayer('Decorations', 50 * 64, 84 * 64);
-        this.decoLayer.scale.set(this.scale);
+        this.decoLayer.setScale(this.scale, this.scale);
         this.decoLayer.resizeWorld();
         // this.decoLayer.wrap = true;
         this.game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
@@ -81,10 +81,12 @@ export class MetroidLevel {
         this.game.physics.arcade.gravity.y = 1000;
 
         this.doors_down = this.game.add.sprite(0, 64 * 73 * this.scale, 'door');
+        this.doors_down.scale.set(this.scale);
         this.game.physics.enable(this.doors_down);
         this.doors_down.body.immovable = true;
         this.doors_down.body.allowGravity = false;
         this.doors_up = this.game.add.sprite(64 * 49 * this.scale, 64 * 4 * this.scale, 'door');
+        this.doors_down.scale.set(this.scale);
         this.game.physics.enable(this.doors_up);
         this.doors_up.body.immovable = true;
         this.doors_up.body.allowGravity = false;
@@ -101,17 +103,17 @@ export class MetroidLevel {
         this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
 
         this.enemies = this.game.add.group();
-        this.enemies.create(41 * 64, 74 * 64, 'mantanoid');
-        this.enemies.create(19 * 64, 74 * 64, 'mantanoid');
-        this.enemies.create(30 * 64, 66 * 64, 'mantanoid');
-        this.enemies.create(33 * 64, 42 * 64, 'mantanoid');
-        this.enemies.create(40 * 64, 42 * 64, 'mantanoid');
-        this.enemies.create(31 * 64, 24 * 64, 'mantanoid');
-        this.enemies.create(30 * 64, 12 * 64, 'mantanoid');
-        this.enemies.create(7 * 64, 12 * 64, 'mantanoid');
-        this.enemies.create(43 * 64, 64 * 64, 'bat');
-        this.enemies.create(13 * 64, 45 * 64, 'bat');
-        this.enemies.create(42 * 64, 23 * 64, 'bat');
+        this.enemies.create(41 * 64 * this.scale, 74 * 64 * this.scale, 'mantanoid');
+        this.enemies.create(19 * 64 * this.scale, 74 * 64 * this.scale, 'mantanoid');
+        this.enemies.create(30 * 64 * this.scale, 66 * 64 * this.scale, 'mantanoid');
+        this.enemies.create(33 * 64 * this.scale, 42 * 64 * this.scale, 'mantanoid');
+        this.enemies.create(40 * 64 * this.scale, 42 * 64 * this.scale, 'mantanoid');
+        this.enemies.create(31 * 64 * this.scale, 24 * 64 * this.scale, 'mantanoid');
+        this.enemies.create(30 * 64 * this.scale, 12 * 64 * this.scale, 'mantanoid');
+        this.enemies.create(7 * 64 * this.scale, 12 * 64 * this.scale, 'mantanoid');
+        this.enemies.create(43 * 64 * this.scale, 64 * 64 * this.scale, 'bat');
+        this.enemies.create(13 * 64 * this.scale, 45 * 64 * this.scale, 'bat');
+        this.enemies.create(42 * 64 * this.scale, 23 * 64 * this.scale, 'bat');
         this.game.physics.enable(this.enemies);
         this.enemies.setAll('anchor.x', 0.5);
         var style = { font: "30px Arial", fill: "#ffffff" };
@@ -127,10 +129,11 @@ export class MetroidLevel {
                 this.enemies.children[i].addChild(this.game.add.text(20, 20, this.skillsComm[indexBat], style));
                 indexBat++;
             }
+            this.enemies.children[i].scale.set(this.scale);
         }
 
         this.perso = this.game.add.sprite(64 * 5 * this.scale, 64 * 78 * this.scale, 'perso');
-        this.perso.scale.set(0.8);
+        this.perso.scale.set(0.8 * this.scale);
         this.game.physics.enable(this.perso);
         this.perso.body.collideWorldBounds = true;
         this.perso.anchor.x = 0.5;
@@ -159,7 +162,7 @@ export class MetroidLevel {
             this.game.state.start('metroid');
         });
         this.game.physics.arcade.collide(this.bullets, this.enemies, (bullet, enemy) => {
-            const t = this.game.add.text(200, 500, enemy.children[0].text, { font: 50 + "px Arial", fill: "#ffffff", align: "center" });
+            const t = this.game.add.text(200 * this.scale, 500 * this.scale, enemy.children[0].text, { font: 50 + "px Arial", fill: "#ffffff", align: "center" });
             t.fixedToCamera = true;
             t.cameraOffset.setTo(20, (60 * this.nbKilled) + 20);
             if (this.skillsComm.indexOf(t.text) > -1) {

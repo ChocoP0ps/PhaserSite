@@ -69,7 +69,7 @@ export class MarioLevel {
         this.map = this.game.add.tilemap('map');
         this.map.addTilesetImage('SuperMarioBros-World1-1', 'tiles');
         this.layer = this.map.createLayer('World1', window.screen.width, window.screen.height);
-        this.layer.scale.set(this.scale);
+        this.layer.setScale(this.scale, this.scale);
         this.layer.resizeWorld();
         this.layer.wrap = true;
         this.cursors = this.game.input.keyboard.createCursorKeys();
@@ -77,12 +77,12 @@ export class MarioLevel {
         this.game.physics.arcade.gravity.y = 400;
 
         this.descr = "Je m'appelle Alexandre Cano.\nJe suis etudiant en troisieme annee d'ecole\nd'ingenieur informatique, a l'eXia.Cesi\nd'Aix en Provence, ou je prepare un diplome de\ngenie logiciel.\nJe suis a la recherche d'un stage dans mon\ndomaine de predilection, le jeux video.\nJe vous laisse partir a l'aventure, a travers\nce personnage, afin de decouvrir mon univers.";
-        this.descrText = this.game.add.bitmapText(11 * 64, 3 * 64, 'emulogic_white', '', 16);
+        this.descrText = this.game.add.bitmapText(11 * 64 * this.scale, 3 * 64 * this.scale, 'emulogic_white', '', 16);
 
-        this.formationText = this.game.add.bitmapText(11.73 * 64, 8.6 * 64, 'emulogic_black', '', 11);
-        this.experienceText = this.game.add.bitmapText(14.6 * 64, 8.6 * 64, 'emulogic_black', '', 11);
-        this.projetsText = this.game.add.bitmapText(17.87 * 64, 8.6 * 64, 'emulogic_black', '', 11);
-        this.contactText = this.game.add.bitmapText(20.87 * 64, 8.6 * 64, 'emulogic_black', '', 11);
+        this.formationText = this.game.add.bitmapText(11.73 * 64 * this.scale, 8.6 * 64 * this.scale, 'emulogic_black', '', 11);
+        this.experienceText = this.game.add.bitmapText(14.6 * 64 * this.scale, 8.6 * 64 * this.scale, 'emulogic_black', '', 11);
+        this.projetsText = this.game.add.bitmapText(17.87 * 64 * this.scale, 8.6 * 64 * this.scale, 'emulogic_black', '', 11);
+        this.contactText = this.game.add.bitmapText(20.87 * 64 * this.scale, 8.6 * 64 * this.scale, 'emulogic_black', '', 11);
 
         this.perso = this.game.add.sprite(64 * 16 * this.scale, 64 * 12 * this.scale, 'perso');
         this.perso.scale.set(0.4);
@@ -98,10 +98,10 @@ export class MarioLevel {
         this.game.physics.enable(this.perso);
         this.perso.body.setSize(161, 278, 80, 43);
 
-        this.formationTile = this.layer.getTiles(12 * 64, 9 * 64, 64, 64)[0];
-        this.experienceTile = this.layer.getTiles(15 * 64, 9 * 64, 1, 1)[0];
-        this.projetsTile = this.layer.getTiles(18 * 64, 9 * 64, 1, 1)[0];
-        this.contactTile = this.layer.getTiles(21 * 64, 9 * 64, 1, 1)[0];
+        this.formationTile = this.layer.getTiles(12 * 64 * this.scale, 9 * 64 * this.scale, 64, 64)[0];
+        this.experienceTile = this.layer.getTiles(15 * 64 * this.scale, 9 * 64 * this.scale, 1, 1)[0];
+        this.projetsTile = this.layer.getTiles(18 * 64 * this.scale, 9 * 64 * this.scale, 1, 1)[0];
+        this.contactTile = this.layer.getTiles(21 * 64 * this.scale, 9 * 64 * this.scale, 1, 1)[0];
 
     }
 
@@ -113,60 +113,60 @@ export class MarioLevel {
             this.nextLetter = this.game.time.now + 35;
         }
 
-        if (this.perso.position.x > 11.5 * 64 && this.perso.position.x < 13.5 * 64) {
+        if (this.perso.position.x > 11.5 * 64 * this.scale && this.perso.position.x < 13.5 * 64 * this.scale) {
             if (this.nextLetterFormation < this.game.time.now && this.formationText.text.length < 'Formation'.length) {
                 this.formationText.text += 'Formation'[this.formationText.text.length];
                 this.nextLetterFormation = this.game.time.now + 50;
             }
-            if (this.perso.position.x > 12 * 64 && this.perso.position.x < 13 * 64 && this.perso.position.y < 690 && this.perso.position.y > 685) {
+            if (this.perso.position.x > 12 * 64 * this.scale && this.perso.position.x < 13 * 64 * this.scale && this.perso.position.y < 690 * this.scale && this.perso.position.y > 685 * this.scale) {
                 this.game.state.start('metroid');
             }
         } else {
             this.formationText.text = this.formationText.text.substring(0, this.formationText.text.length - 1);
         }
-        if (this.perso.position.x > 14.5 * 64 && this.perso.position.x < 16.5 * 64) {
+        if (this.perso.position.x > 14.5 * 64 * this.scale && this.perso.position.x < 16.5 * 64 * this.scale) {
             if (this.nextLetterExperience < this.game.time.now && this.experienceText.text.length < 'Experience'.length) {
                 this.experienceText.text += 'Experience'[this.experienceText.text.length];
                 this.nextLetterExperience = this.game.time.now + 50;
             }
-            if (this.perso.position.x > 15 * 64 && this.perso.position.x < 16 * 64 && this.perso.position.y < 690 && this.perso.position.y > 685) {
+            if (this.perso.position.x > 15 * 64 * this.scale && this.perso.position.x < 16 * 64 * this.scale && this.perso.position.y < 690 * this.scale && this.perso.position.y > 685 * this.scale) {
                 console.log(this.perso.position.y);
             }
         } else {
             this.experienceText.text = this.experienceText.text.substring(0, this.experienceText.text.length - 1);
         }
-        if (this.perso.position.x > 17.5 * 64 && this.perso.position.x < 19.5 * 64) {
+        if (this.perso.position.x > 17.5 * 64 * this.scale && this.perso.position.x < 19.5 * 64 * this.scale) {
             if (this.nextLetterProjet < this.game.time.now && this.projetsText.text.length < 'Projets'.length) {
                 this.projetsText.text += 'Projets'[this.projetsText.text.length];
                 this.nextLetterProjet = this.game.time.now + 50;
             }
-            if (this.perso.position.x > 18 * 64 && this.perso.position.x < 19 * 64 && this.perso.position.y < 690 && this.perso.position.y > 685) {
-                console.log(this.perso.position.y);
+            if (this.perso.position.x > 18 * 64 * this.scale && this.perso.position.x < 19 * 64 * this.scale && this.perso.position.y < 690 * this.scale && this.perso.position.y > 685 * this.scale) {
+                this.game.state.start('donkeyKong');
             }
         } else {
             this.projetsText.text = this.projetsText.text.substring(0, this.projetsText.text.length - 1);
         }
-        if (this.perso.position.x > 20.5 * 64 && this.perso.position.x < 22.5 * 64) {
+        if (this.perso.position.x > 20.5 * 64 * this.scale && this.perso.position.x < 22.5 * 64 * this.scale) {
             if (this.nextLetterContact < this.game.time.now && this.contactText.text.length < 'Contact'.length) {
                 this.contactText.text += 'Contact'[this.contactText.text.length];
                 this.nextLetterContact = this.game.time.now + 50;
             }
-            if (this.perso.position.x > 21 * 64 && this.perso.position.x < 22 * 64 && this.perso.position.y < 690 && this.perso.position.y > 685) {
+            if (this.perso.position.x > 21 * 64 * this.scale && this.perso.position.x < 22 * 64 * this.scale && this.perso.position.y < 690 * this.scale && this.perso.position.y > 685 * this.scale) {
                 console.log(this.perso.position.y);
             }
         } else {
             this.contactText.text = this.contactText.text.substring(0, this.contactText.text.length - 1);
         }
 
-        if (this.formationTile.containsPoint(this.game.input.x, this.game.input.y)) {
-            console.log('on formation');
-        } else if (this.experienceTile.containsPoint(this.game.input.x, this.game.input.y)) {
-            console.log('on experience');
-        } else if (this.projetsTile.containsPoint(this.game.input.x, this.game.input.y)) {
-            console.log('on projets');
-        } else if (this.contactTile.containsPoint(this.game.input.x, this.game.input.y)) {
-            console.log('on contact');
-        }
+        // if (this.formationTile.containsPoint(this.game.input.x, this.game.input.y)) {
+        //     console.log('on formation');
+        // } else if (this.experienceTile.containsPoint(this.game.input.x, this.game.input.y)) {
+        //     console.log('on experience');
+        // } else if (this.projetsTile.containsPoint(this.game.input.x, this.game.input.y)) {
+        //     console.log('on projets');
+        // } else if (this.contactTile.containsPoint(this.game.input.x, this.game.input.y)) {
+        //     console.log('on contact');
+        // }
 
 
         this.game.physics.arcade.collide(this.perso, this.layer);
