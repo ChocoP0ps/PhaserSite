@@ -45,7 +45,6 @@ export class MetroidLevel {
     }
 
     preload() {
-        // this.game.scale.setGameSize(50 * 64, 84 * 64);
         this.game.load.tilemap('map', 'assets/map/metroid.json', null, Phaser.Tilemap.TILED_JSON);
         this.game.load.image('extras', 'assets/map/extras.png', 64, 64);
         this.game.load.image('main', 'assets/map/main_blue.png', 64, 64);
@@ -54,7 +53,7 @@ export class MetroidLevel {
         this.game.load.image('mantanoid', 'assets/map/mantanoid.png');
         this.game.load.image('bat', 'assets/map/bat.png');
         this.game.load.spritesheet('perso', 'assets/map/perso_grand.png', 349, 320);
-        this.scale = window.innerHeight / 949;
+        this.scale = window.innerHeight / 949 < 1 ? 1 : window.innerHeight / 949;
         this.speed = 800;
         this.bulletTime = 0;
         this.moveEnemiesTime = 0;
