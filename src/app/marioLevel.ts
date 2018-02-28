@@ -34,6 +34,7 @@ export class MarioLevel {
     nextLetterProjet: number;
     contactText: any;
     nextLetterContact: number;
+    tileSize: number;
 
     constructor(game) {
         this.game = game;
@@ -49,10 +50,11 @@ export class MarioLevel {
     }
     
     preload() {
+        this.tileSize = 48;
         this.game.load.tilemap('map', 'assets/map/super_mario.json', null, Phaser.Tilemap.TILED_JSON);
-        this.game.load.image('tiles', 'assets/map/super_mario.png', 64, 64);
+        this.game.load.image('tiles', 'assets/map/super_mario2.png', this.tileSize, this.tileSize);
         this.game.load.spritesheet('perso', 'assets/map/perso_grand.png', 349, 320);
-        this.scale =  window.innerHeight / 949 < 1 ? 1 : window.innerHeight / 949;
+        this.scale =  window.innerHeight / 712 < 1 ? 1 : window.innerHeight / 712;
         this.speed = 300;
         this.game.load.bitmapFont('emulogic_white', 'assets/Fonts/emulogic_white.png', 'assets/Fonts/emulogic.fnt', 0, 0, 10);
         this.game.load.bitmapFont('emulogic_black', 'assets/Fonts/emulogic_black.png', 'assets/Fonts/emulogic.fnt', 0, 0, 10);
@@ -77,14 +79,14 @@ export class MarioLevel {
         this.game.physics.arcade.gravity.y = 400;
 
         this.descr = "Je m'appelle Alexandre Cano.\nJe suis etudiant en troisieme annee d'ecole\nd'ingenieur informatique, a l'eXia.Cesi\nd'Aix en Provence, ou je prepare un diplome de\ngenie logiciel.\nJe suis a la recherche d'un stage dans mon\ndomaine de predilection, le jeux video.\nJe vous laisse partir a l'aventure, a travers\nce personnage, afin de decouvrir mon univers.";
-        this.descrText = this.game.add.bitmapText(11 * 64 * this.scale, 3 * 64 * this.scale, 'emulogic_white', '', 16);
+        this.descrText = this.game.add.bitmapText(11 * this.tileSize * this.scale, 3 * this.tileSize * this.scale, 'emulogic_white', '', 12 * this.scale);
 
-        this.formationText = this.game.add.bitmapText(11.73 * 64 * this.scale, 8.6 * 64 * this.scale, 'emulogic_black', '', 11);
-        this.experienceText = this.game.add.bitmapText(14.6 * 64 * this.scale, 8.6 * 64 * this.scale, 'emulogic_black', '', 11);
-        this.projetsText = this.game.add.bitmapText(17.87 * 64 * this.scale, 8.6 * 64 * this.scale, 'emulogic_black', '', 11);
-        this.contactText = this.game.add.bitmapText(20.87 * 64 * this.scale, 8.6 * 64 * this.scale, 'emulogic_black', '', 11);
+        this.formationText = this.game.add.bitmapText(11.73 * this.tileSize * this.scale, 8.6 * this.tileSize * this.scale, 'emulogic_black', '', 8.25 * this.scale);
+        this.experienceText = this.game.add.bitmapText(14.6 * this.tileSize * this.scale, 8.6 * this.tileSize * this.scale, 'emulogic_black', '', 8.25 * this.scale);
+        this.projetsText = this.game.add.bitmapText(17.87 * this.tileSize * this.scale, 8.6 * this.tileSize * this.scale, 'emulogic_black', '', 8.25 * this.scale);
+        this.contactText = this.game.add.bitmapText(20.87 * this.tileSize * this.scale, 8.6 * this.tileSize * this.scale, 'emulogic_black', '', 8.25 * this.scale);
 
-        this.perso = this.game.add.sprite(64 * 16 * this.scale, 64 * 12 * this.scale, 'perso');
+        this.perso = this.game.add.sprite(this.tileSize * 16 * this.scale, this.tileSize * 12 * this.scale, 'perso');
         this.perso.scale.set(0.4);
         this.game.physics.enable(this.perso);
         this.perso.body.collideWorldBounds = true;
@@ -99,10 +101,10 @@ export class MarioLevel {
         this.perso.body.setSize(161, 278, 80, 43);
         this.game.camera.follow(this.perso);
 
-        this.formationTile = this.layer.getTiles(12 * 64 * this.scale, 9 * 64 * this.scale, 64, 64)[0];
-        this.experienceTile = this.layer.getTiles(15 * 64 * this.scale, 9 * 64 * this.scale, 1, 1)[0];
-        this.projetsTile = this.layer.getTiles(18 * 64 * this.scale, 9 * 64 * this.scale, 1, 1)[0];
-        this.contactTile = this.layer.getTiles(21 * 64 * this.scale, 9 * 64 * this.scale, 1, 1)[0];
+        this.formationTile = this.layer.getTiles(12 * this.tileSize * this.scale, 9 * this.tileSize * this.scale, this.tileSize, this.tileSize)[0];
+        this.experienceTile = this.layer.getTiles(15 * this.tileSize * this.scale, 9 * this.tileSize * this.scale, 1, 1)[0];
+        this.projetsTile = this.layer.getTiles(18 * this.tileSize * this.scale, 9 * this.tileSize * this.scale, 1, 1)[0];
+        this.contactTile = this.layer.getTiles(21 * this.tileSize * this.scale, 9 * this.tileSize * this.scale, 1, 1)[0];
 
     }
 
@@ -111,48 +113,48 @@ export class MarioLevel {
         if (this.nextLetter < this.game.time.now && this.counterLetter < this.descr.length) {
             this.descrText.text += this.descr[this.counterLetter];
             this.counterLetter++;
-            this.nextLetter = this.game.time.now + 35;
+            this.nextLetter = this.game.time.now + 25;
         }
 
-        if (this.perso.position.x > 11.5 * 64 * this.scale && this.perso.position.x < 13.5 * 64 * this.scale) {
+        if (this.perso.position.x > 11.5 * this.tileSize * this.scale && this.perso.position.x < 13.5 * this.tileSize * this.scale) {
             if (this.nextLetterFormation < this.game.time.now && this.formationText.text.length < 'Formation'.length) {
                 this.formationText.text += 'Formation'[this.formationText.text.length];
                 this.nextLetterFormation = this.game.time.now + 50;
             }
-            if (this.perso.position.x > 12 * 64 * this.scale && this.perso.position.x < 13 * 64 * this.scale && this.perso.position.y < 690 * this.scale && this.perso.position.y > 685 * this.scale) {
+            if (this.perso.position.x > 12 * this.tileSize * this.scale && this.perso.position.x < 13 * this.tileSize * this.scale && this.perso.position.y < 518 * this.scale && this.perso.position.y > 513 * this.scale) {
                 this.game.state.start('metroid');
             }
         } else {
             this.formationText.text = this.formationText.text.substring(0, this.formationText.text.length - 1);
         }
-        if (this.perso.position.x > 14.5 * 64 * this.scale && this.perso.position.x < 16.5 * 64 * this.scale) {
+        if (this.perso.position.x > 14.5 * this.tileSize * this.scale && this.perso.position.x < 16.5 * this.tileSize * this.scale) {
             if (this.nextLetterExperience < this.game.time.now && this.experienceText.text.length < 'Experience'.length) {
                 this.experienceText.text += 'Experience'[this.experienceText.text.length];
                 this.nextLetterExperience = this.game.time.now + 50;
             }
-            if (this.perso.position.x > 15 * 64 * this.scale && this.perso.position.x < 16 * 64 * this.scale && this.perso.position.y < 690 * this.scale && this.perso.position.y > 685 * this.scale) {
+            if (this.perso.position.x > 15 * this.tileSize * this.scale && this.perso.position.x < 16 * this.tileSize * this.scale && this.perso.position.y < 518 * this.scale && this.perso.position.y > 513 * this.scale) {
                 console.log(this.perso.position.y);
             }
         } else {
             this.experienceText.text = this.experienceText.text.substring(0, this.experienceText.text.length - 1);
         }
-        if (this.perso.position.x > 17.5 * 64 * this.scale && this.perso.position.x < 19.5 * 64 * this.scale) {
+        if (this.perso.position.x > 17.5 * this.tileSize * this.scale && this.perso.position.x < 19.5 * this.tileSize * this.scale) {
             if (this.nextLetterProjet < this.game.time.now && this.projetsText.text.length < 'Projets'.length) {
                 this.projetsText.text += 'Projets'[this.projetsText.text.length];
                 this.nextLetterProjet = this.game.time.now + 50;
             }
-            if (this.perso.position.x > 18 * 64 * this.scale && this.perso.position.x < 19 * 64 * this.scale && this.perso.position.y < 690 * this.scale && this.perso.position.y > 685 * this.scale) {
+            if (this.perso.position.x > 18 * this.tileSize * this.scale && this.perso.position.x < 19 * this.tileSize * this.scale && this.perso.position.y < 518 * this.scale && this.perso.position.y > 513 * this.scale) {
                 this.game.state.start('donkeyKong');
             }
         } else {
             this.projetsText.text = this.projetsText.text.substring(0, this.projetsText.text.length - 1);
         }
-        if (this.perso.position.x > 20.5 * 64 * this.scale && this.perso.position.x < 22.5 * 64 * this.scale) {
+        if (this.perso.position.x > 20.5 * this.tileSize * this.scale && this.perso.position.x < 22.5 * this.tileSize * this.scale) {
             if (this.nextLetterContact < this.game.time.now && this.contactText.text.length < 'Contact'.length) {
                 this.contactText.text += 'Contact'[this.contactText.text.length];
                 this.nextLetterContact = this.game.time.now + 50;
             }
-            if (this.perso.position.x > 21 * 64 * this.scale && this.perso.position.x < 22 * 64 * this.scale && this.perso.position.y < 690 * this.scale && this.perso.position.y > 685 * this.scale) {
+            if (this.perso.position.x > 21 * this.tileSize * this.scale && this.perso.position.x < 22 * this.tileSize * this.scale && this.perso.position.y < 518 * this.scale && this.perso.position.y > 513 * this.scale) {
                 console.log(this.perso.position.y);
             }
         } else {
