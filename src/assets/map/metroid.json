@@ -27,7 +27,7 @@
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.1.1",
- "tileheight":64,
+ "tileheight":32,
  "tilesets":[
         {
          "columns":22,
@@ -39,14 +39,14 @@
              "width":8
             },
          "image":"main_blue.png",
-         "imageheight":256,
-         "imagewidth":1408,
+         "imageheight":128,
+         "imagewidth":704,
          "margin":0,
          "name":"main",
          "spacing":0,
          "tilecount":88,
-         "tileheight":64,
-         "tilewidth":64
+         "tileheight":32,
+         "tilewidth":32
         }, 
         {
          "columns":11,
@@ -58,16 +58,16 @@
              "width":8
             },
          "image":"extras.png",
-         "imageheight":448,
-         "imagewidth":704,
+         "imageheight":224,
+         "imagewidth":352,
          "margin":0,
          "name":"extras",
          "spacing":0,
-         "tilecount":77,
-         "tileheight":64,
-         "tilewidth":64
+         "tilecount":308,
+         "tileheight":32,
+         "tilewidth":32
         }],
- "tilewidth":64,
+ "tilewidth":32,
  "type":"map",
  "version":1,
  "width":50

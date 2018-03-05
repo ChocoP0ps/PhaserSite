@@ -55,7 +55,10 @@ export class MarioLevel {
         this.game.load.image('tiles', 'assets/map/super_mario2.png', this.tileSize, this.tileSize);
         this.game.load.spritesheet('perso', 'assets/map/perso_grand.png', 349, 320);
         this.scale =  window.innerHeight / 712 < 1 ? 1 : window.innerHeight / 712;
-        this.speed = 300;
+        console.log(this.scale);
+        console.log(10 * this.tileSize * this.scale);
+        console.log(10.1 * this.tileSize * this.scale);
+        this.speed = 300 * this.scale;
         this.game.load.bitmapFont('emulogic_white', 'assets/Fonts/emulogic_white.png', 'assets/Fonts/emulogic.fnt', 0, 0, 10);
         this.game.load.bitmapFont('emulogic_black', 'assets/Fonts/emulogic_black.png', 'assets/Fonts/emulogic.fnt', 0, 0, 10);
         this.nextLetter = 0;
@@ -76,7 +79,7 @@ export class MarioLevel {
         this.layer.wrap = true;
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.map.setCollision([14, 16, 21, 22, 27, 28, 40]);
-        this.game.physics.arcade.gravity.y = 400;
+        this.game.physics.arcade.gravity.y = 400 * this.scale;
 
         this.descr = "Je m'appelle Alexandre Cano.\nJe suis etudiant en troisieme annee d'ecole\nd'ingenieur informatique, a l'eXia.Cesi\nd'Aix en Provence, ou je prepare un diplome de\ngenie logiciel.\nJe suis a la recherche d'un stage dans mon\ndomaine de predilection, le jeux video.\nJe vous laisse partir a l'aventure, a travers\nce personnage, afin de decouvrir mon univers.";
         this.descrText = this.game.add.bitmapText(11 * this.tileSize * this.scale, 3 * this.tileSize * this.scale, 'emulogic_white', '', 12 * this.scale);
@@ -86,13 +89,12 @@ export class MarioLevel {
         this.projetsText = this.game.add.bitmapText(17.87 * this.tileSize * this.scale, 8.6 * this.tileSize * this.scale, 'emulogic_black', '', 8.25 * this.scale);
         this.contactText = this.game.add.bitmapText(20.87 * this.tileSize * this.scale, 8.6 * this.tileSize * this.scale, 'emulogic_black', '', 8.25 * this.scale);
 
-        this.perso = this.game.add.sprite(this.tileSize * 16 * this.scale, this.tileSize * 12 * this.scale, 'perso');
-        this.perso.scale.set(0.4);
+        this.perso = this.game.add.sprite(this.tileSize * 16 * this.scale, this.tileSize * 11 * this.scale, 'perso');
+        this.perso.scale.set(0.3 * this.scale);
         this.game.physics.enable(this.perso);
         this.perso.body.collideWorldBounds = true;
         this.perso.body.bounce.set(0);
         this.perso.anchor.x = 0.5;
-        this.perso.anchor.y = 0.5;
         this.perso.animations.add('idle', [4, 15, 26], 6, true, true);
         this.perso.animations.add('walk_horizontally', [8, 19, 30, 41, 52, 63, 74, 85], 30, true, true);
         this.perso.animations.add('jump', [6, 17, 28], 10, true, true);
@@ -121,7 +123,7 @@ export class MarioLevel {
                 this.formationText.text += 'Formation'[this.formationText.text.length];
                 this.nextLetterFormation = this.game.time.now + 50;
             }
-            if (this.perso.position.x > 12 * this.tileSize * this.scale && this.perso.position.x < 13 * this.tileSize * this.scale && this.perso.position.y < 518 * this.scale && this.perso.position.y > 513 * this.scale) {
+            if (this.perso.position.x > 12 * this.tileSize * this.scale && this.perso.position.x < 13 * this.tileSize * this.scale && this.perso.position.y > 10 * this.tileSize * this.scale && this.perso.position.y < 10.1 * this.tileSize * this.scale) {
                 this.game.state.start('metroid');
             }
         } else {
@@ -132,7 +134,7 @@ export class MarioLevel {
                 this.experienceText.text += 'Experience'[this.experienceText.text.length];
                 this.nextLetterExperience = this.game.time.now + 50;
             }
-            if (this.perso.position.x > 15 * this.tileSize * this.scale && this.perso.position.x < 16 * this.tileSize * this.scale && this.perso.position.y < 518 * this.scale && this.perso.position.y > 513 * this.scale) {
+            if (this.perso.position.x > 15 * this.tileSize * this.scale && this.perso.position.x < 16 * this.tileSize * this.scale && this.perso.position.y > 10 * this.tileSize * this.scale && this.perso.position.y < 10.1 * this.tileSize * this.scale) {
                 console.log(this.perso.position.y);
             }
         } else {
@@ -143,7 +145,7 @@ export class MarioLevel {
                 this.projetsText.text += 'Projets'[this.projetsText.text.length];
                 this.nextLetterProjet = this.game.time.now + 50;
             }
-            if (this.perso.position.x > 18 * this.tileSize * this.scale && this.perso.position.x < 19 * this.tileSize * this.scale && this.perso.position.y < 518 * this.scale && this.perso.position.y > 513 * this.scale) {
+            if (this.perso.position.x > 18 * this.tileSize * this.scale && this.perso.position.x < 19 * this.tileSize * this.scale && this.perso.position.y > 10 * this.tileSize * this.scale && this.perso.position.y < 10.1 * this.tileSize * this.scale) {
                 this.game.state.start('donkeyKong');
             }
         } else {
@@ -154,7 +156,7 @@ export class MarioLevel {
                 this.contactText.text += 'Contact'[this.contactText.text.length];
                 this.nextLetterContact = this.game.time.now + 50;
             }
-            if (this.perso.position.x > 21 * this.tileSize * this.scale && this.perso.position.x < 22 * this.tileSize * this.scale && this.perso.position.y < 518 * this.scale && this.perso.position.y > 513 * this.scale) {
+            if (this.perso.position.x > 21 * this.tileSize * this.scale && this.perso.position.x < 22 * this.tileSize * this.scale && this.perso.position.y > 10 * this.tileSize * this.scale && this.perso.position.y < 10.1 * this.tileSize * this.scale) {
                 console.log(this.perso.position.y);
             }
         } else {
@@ -206,7 +208,7 @@ export class MarioLevel {
 
         if (this.up && this.perso.body.onFloor()) {
             this.jump = true;
-            this.perso.body.velocity.y = -350;
+            this.perso.body.velocity.y = -350  * this.scale;
             if (this.perso.animations.name !== 'jump') {
                 this.perso.animations.play('jump', 6, true);
             }

@@ -50,7 +50,7 @@ export class DonkeyKongLevel {
         this.game.load.image('tp', 'assets/map/tp.png', 64, 64);
         this.game.load.spritesheet('perso', 'assets/map/perso_grand.png', 349, 320);
         this.scale = window.innerWidth / 1792 < 1 ? 1 : window.innerWidth / 1792;
-        this.speed = 800;
+        this.speed = 800 * this.scale;
     }
     create() {
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
