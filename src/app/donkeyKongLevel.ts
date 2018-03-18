@@ -29,6 +29,7 @@ export class DonkeyKongLevel {
     skillsLang: string[];
     skillsComm: string[];
     nbKilled: number;
+    onLadder: boolean;
 
     constructor(game) {
         this.game = game;
@@ -51,21 +52,25 @@ export class DonkeyKongLevel {
         this.game.load.spritesheet('perso', 'assets/map/perso_grand.png', 349, 320);
         this.scale = window.innerWidth / 1792 < 1 ? 1 : window.innerWidth / 1792;
         this.speed = 800 * this.scale;
+        this.onLadder = false;
     }
     create() {
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
         this.map = this.game.add.tilemap('map');
         this.map.addTilesetImage('ground', 'ground');
         this.map.addTilesetImage('ladder', 'ladder');
-        this.groundLayer = this.map.createLayer('Ground', 28 * 64, 260 * 8);
-        this.groundLayer.setScale(this.scale, this.scale);
-        // this.groundLayer.wrap = true;
-        this.groundLayer.resizeWorld();
         this.ladderLayer = this.map.createLayer('Ladder', 28 * 64, 260 * 8);
         this.ladderLayer.setScale(this.scale, this.scale);
-        // this.ladderLayer.wrap = true;
+        this.ladderLayer.wrap = true;
         this.ladderLayer.resizeWorld();
+        this.groundLayer = this.map.createLayer('Ground', 28 * 64, 260 * 8);
+        this.groundLayer.setScale(this.scale, this.scale);
+        this.groundLayer.wrap = true;
+        this.groundLayer.resizeWorld();
         this.map.setCollisionByExclusion([], true, this.groundLayer);
+        this.map.setTileIndexCallback([17, 18, 19, 20, 21, 22, 23, 24], () => {
+            this.onLadder = true;
+        }, this, this.ladderLayer);
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.game.physics.arcade.gravity.y = 1000;
 
@@ -98,6 +103,7 @@ export class DonkeyKongLevel {
 
     update() {
         this.game.physics.arcade.collide(this.perso, this.groundLayer);
+        this.game.physics.arcade.collide(this.perso, this.ladderLayer);
         this.game.physics.arcade.collide(this.perso, this.tps, () => {
             this.game.state.start('mario');
         });
@@ -129,7 +135,6 @@ export class DonkeyKongLevel {
         this.perso.body.velocity.x = 0;
         this.bending = false;
         this.shooting = false;
-        // this.perso.body.velocity.y = 0;
 
         this.jump = !this.perso.body.onFloor();
 
@@ -137,17 +142,34 @@ export class DonkeyKongLevel {
             this.perso.body.velocity.y = 1000;
         }
 
-        if (this.up && this.perso.body.onFloor()) {
-            this.jump = true;
-            this.perso.body.velocity.y = -750;
-            if (this.perso.animations.name !== 'jump') {
-                this.perso.animations.play('jump', 20, true);
+        if (this.onLadder) {
+            this.perso.body.allowGravity = false;
+            this.perso.body.velocity.y = 0;
+            if (this.up) {
+                this.perso.body.y -= 10;
+                if (this.perso.animations.name !== 'jump') {
+                    this.perso.animations.play('jump', 20, true);
+                }
+            } else if (this.down && this.map.getTileWorldXY(this.perso.x, this.perso.y + (this.perso.height / 2)) != null) {
+                this.perso.body.y += 10;
+                if (this.perso.animations.name !== 'jump') {
+                    this.perso.animations.play('jump', 20, true);
+                }
             }
-        } else if (this.down) {
-            this.bending = true;
-            this.perso.body.velocity.y = this.speed;
-            if (this.perso.animations.name !== 'bend') {
-                this.perso.animations.play('bend', 30, false);
+        } else {
+            this.perso.body.allowGravity = true;
+            if (this.up && this.perso.body.onFloor()) {
+                this.jump = true;
+                this.perso.body.velocity.y = -750;
+                if (this.perso.animations.name !== 'jump') {
+                    this.perso.animations.play('jump', 20, true);
+                }
+            } else if (this.down) {
+                this.bending = true;
+                this.perso.body.velocity.y = this.speed;
+                if (this.perso.animations.name !== 'bend') {
+                    this.perso.animations.play('bend', 30, false);
+                }
             }
         }
 
@@ -174,5 +196,7 @@ export class DonkeyKongLevel {
                 this.perso.animations.play('idle', 6, true);
             }
         }
+
+        this.onLadder = false;
     }
 }

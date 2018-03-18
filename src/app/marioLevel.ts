@@ -55,9 +55,6 @@ export class MarioLevel {
         this.game.load.image('tiles', 'assets/map/super_mario2.png', this.tileSize, this.tileSize);
         this.game.load.spritesheet('perso', 'assets/map/perso_grand.png', 349, 320);
         this.scale =  window.innerHeight / 712 < 1 ? 1 : window.innerHeight / 712;
-        console.log(this.scale);
-        console.log(10 * this.tileSize * this.scale);
-        console.log(10.1 * this.tileSize * this.scale);
         this.speed = 300 * this.scale;
         this.game.load.bitmapFont('emulogic_white', 'assets/Fonts/emulogic_white.png', 'assets/Fonts/emulogic.fnt', 0, 0, 10);
         this.game.load.bitmapFont('emulogic_black', 'assets/Fonts/emulogic_black.png', 'assets/Fonts/emulogic.fnt', 0, 0, 10);
